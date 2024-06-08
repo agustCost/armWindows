@@ -8,6 +8,7 @@
 .globl	    init_ssd1306
 .globl	    send_1306
 .globl	    delay
+.globl	    print_bitmap
 .data
 
 .text
@@ -82,7 +83,7 @@ init_ssd1306:
     sw		$t0, PORTD
 
     jal		delay
-    # SSD1306 initialization based on datasheet sequence
+    # SSD1306 initialization
 	# OFF
 	li	$a1, 0x1
 	li	$a0, 0xAE
@@ -116,8 +117,6 @@ init_ssd1306:
 	li	$a0, 0x14
 	jal	send_1306
 	
-	
-	
 	# Horizontal adressing mode
 	li	$a0, 0x20
 	li	$a1, 0x1
@@ -127,7 +126,7 @@ init_ssd1306:
 	li	$a1, 0x1
 	jal	send_1306
 	
-	
+	# Column adress
 	li $a0, 0x21
 	li $a1, 0x1
 	jal send_1306
@@ -139,7 +138,7 @@ init_ssd1306:
 	li $a0, 0x7F
 	li $a1, 0x1
 	jal send_1306
-	
+	# Page adress
 	li $a0, 0x22
 	li $a1, 0x1
 	jal send_1306
@@ -152,10 +151,12 @@ init_ssd1306:
 	li $a1, 0x1
 	jal send_1306
 	
+	# Display ON
 	li $a0, 0xAF
 	li $a1, 0x1
 	jal send_1306
 	
+	# see datasheet
 	li $a0, 0xA4
 	li $a1, 0x1
 	jal send_1306
@@ -218,4 +219,32 @@ delay:
     lw	    $ra, ($sp)
     addi    $sp, $sp, 4
     jr      $ra
-.end main
+    
+    
+# print_bitmap($a0 bitmap)
+print_bitmap:
+    addi    $sp, $sp, -20
+    sw	    $ra, ($sp)
+    sw	    $s0, 4($sp)
+    sw	    $s1, 8($sp)
+    sw	    $s2, 12($sp)
+    sw	    $s3, 16($sp)
+	
+    add	    $s0, $a0, $zero	
+    li	    $s1, 0
+    print_loop:
+	lb	$a0, ($s0)
+	li	$a1, 0x3
+	jal	send_1306
+	addi	$s1, $s1, 1
+	addi	$s0, $s0, 1
+	bne	$s1, 1024, print_loop
+
+    lw	    $s3, 16($sp)
+    lw	    $s2, 12($sp)
+    lw	    $s1, 8($sp)
+    lw	    $s0, 4($sp)
+    lw	    $ra, ($sp)
+    addi    $sp, $sp, 20
+    jr	    $ra
+	    
