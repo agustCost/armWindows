@@ -46,7 +46,7 @@ init_spi:
     # Reset SPIxCON
     sw		$zero, SPI1CON    
     # Set SRG
-    li		$t0, 0
+    li		$t0, 0x0
     sw		$t0, SPI1BRG    
     # Clear SPIROV bit
     li		$t0, 0x40
@@ -83,57 +83,16 @@ init_ssd1306:
 
     jal		delay
     # SSD1306 initialization based on datasheet sequence
-	# Multiplex ratio
+	# OFF
 	li	$a1, 0x1
-	li	$a0, 0xA8
+	li	$a0, 0xAE
 	jal	send_1306
-	li	$a1, 0x1
-	li	$a0, 0x3F
-	jal	send_1306
-	
-	# Set display offset
-	li	$a1, 0x1
-	li	$a0, 0xD3
-	jal	send_1306
-	li	$a1, 0x1
-	li	$a0, 0x00
-	jal	send_1306
-	
-	# Set display start line
-	li	$a1, 0x1
-	li	$a0, 0x40
-	jal	send_1306
-	
-	# Set segment re-map
-	li	$a1, 0x1
-	li	$a0, 0xA0
-	jal	send_1306
-
-	
-	# Set COM output scan direction
-	li	$a1, 0x1
-	li	$a0, 0xC0
-	jal	send_1306
-	
-	# Set COM pins HW config
-	li	$a1, 0x1
-	li	$a0, 0xDA
-	jal	send_1306
-	li	$a1, 0x1
-	li	$a0, 0x02
-	jal	send_1306
-	
 	# Set contrast control
 	li	$a1, 0x1
 	li	$a0, 0x81
 	jal	send_1306
 	li	$a1, 0x1
 	li	$a0, 0x7F
-	jal	send_1306
-	
-	# Disable entire display ON
-	li	$a1, 0x1
-	li	$a0, 0xA4
 	jal	send_1306
 	
 	# Set normal display
@@ -157,24 +116,73 @@ init_ssd1306:
 	li	$a0, 0x14
 	jal	send_1306
 	
-	# Display ON
+	
+	
+	# Horizontal adressing mode
+	li	$a0, 0x20
 	li	$a1, 0x1
-	li	$a0, 0xAF
+	jal	send_1306
+	
+	li	$a0, 0x00
+	li	$a1, 0x1
 	jal	send_1306
 	
 	
-	li	$a1, 0x1
-	li	$a0, 0xA5
-	jal	send_1306
-    
+	li $a0, 0x21
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x00
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x7F
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x22
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x00
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x7
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0xAF
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0xA4
+	li $a1, 0x1
+	jal send_1306
+	
+	li $s0, 0
+	clear_display:
+	    li $a0, 0x00
+	    li $a1, 0x3
+	    jal send_1306
+	    addi $s0, $s0, 1
+	    bne $s0, 1024, clear_display
+	
+	
+	
     lw	    $ra, ($sp)
     addi    $sp, $sp, 4
     jr	    $ra
 # send_1306($a0 byte, $a1 pinState)
     # $a1 can be 0x1 for commands or 0x3 for data
 send_1306:
-    addi    $sp, $sp, -4
+    addi    $sp, $sp, -24
     sw	    $ra, ($sp)
+    sw	    $s0, 4($sp)
+    sw	    $s1, 8($sp)
+    sw	    $s2, 12($sp)
+    sw	    $s3, 16($sp)
+    sw	    $s4, 20($sp)
     
     # DC# low for commands
     # DC# high for data
@@ -190,7 +198,12 @@ send_1306:
 	and	$t1, $t0, $t1
 	beq	$t1, 1, check
     lw	    $ra, ($sp)
-    addi    $sp, $sp, 4
+    lw	    $s0, 4($sp)
+    lw	    $s1, 8($sp)
+    lw	    $s2, 12($sp)
+    lw	    $s3, 16($sp)
+    lw	    $s4, 20($sp)
+    addi    $sp, $sp, 24
     jr	    $ra
 delay:
     addi    $sp, $sp, -4

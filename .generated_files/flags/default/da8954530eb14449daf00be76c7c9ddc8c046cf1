@@ -1,1 +1,0 @@
-$(MP_EXTRA_AS_PRE)  -D__DEBUG   -c -mprocessor=$(MP_PROCESSOR_OPTION) -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--gdwarf-2 -mdfp="${DFP_DIR}"/Users/agustincostabile/Desktop/armWindows.X/driverOled.s

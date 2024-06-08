@@ -1,95 +1,93 @@
 .globl play_melody
 .data
 
-intro_melody: .word 554, 622, 622, 698, 831, 740, 698, 622, 554, 622, -1, 415, 415
-intro_rhythm: .word 6, 10, 6, 6, 1, 1, 1, 1, 6, 10, 4, 2, 10
+melody: .word 554, 622, 622, 698, 831, 740, 698, 622, 554, 622, -1, 415, 415
+rhythm: .word 6, 10, 6, 6, 1, 1, 1, 1, 6, 10, 4, 2, 10
+buffer: .word 0
 
 .text
 # using RE0
-
-# $a0 = delay in us
-delayMicroseconds:
+ play_melody:
+    # 13 note/rh length
+    li $s0, 0
+    la $t0, melody
+    la $t1, rhythm
+    melody_loop:
+	lw $a0, ($t0)
+	lw $a1, ($t1)
+	jal generateTone
+	addi $t0, $t0, 4
+	addi $t1, $t1, 4
+	addi $s0, $s0, 1
+	# length
+	blt $s0, 13, melody_loop
+    jr $ra
+    
+ generateTone:
     addi $sp, $sp, -8
-    sw $ra, 4($sp)
-    sw $t1, 0($sp)
-    
-    li $t1, 0
-delayMicrosecondsLoop:
-    addi $t1, $t1, 1
-    bne $t1, $a0, delayMicrosecondsLoop
-
-    lw $ra, 4($sp)
-    lw $t1, 0($sp)
-    addi $sp, $sp, 8
-    jr $ra
-
-# generate tone
-# $a0 duration, $a1 freq
-generateTone:
-    addi $sp, $sp, -12
-    sw $ra, 8($sp)
-    sw $t1, 4($sp)
-    sw $t2, 0($sp)
-    
-    li $t0, 0x0
-    sw $t0, TRISE
-    li $t0, 1000000
-    div $t0, $a1
-    mflo $t1 # period
-    srl $t1, $t1, 1 # half period
-    
-    mul $t2, $a0, 1000 # duration in us
-    
-toneLoop:
-    beq $t2, $zero, endTone
-    
-    # High period
-    li $t3, 0x1
-    sw $t3, PORTE
-    move $a0, $t1
-    jal delayMicroseconds
-    
-    # Low period
-    li $t3, 0
-    sw $t3, PORTE
-    move $a0, $t1
-    jal delayMicroseconds
-    
-    subu $t2, $t2, $t1
-    subu $t2, $t2, $t1
-    
-    j toneLoop
-endTone:
-    lw $ra, 8($sp)
-    lw $t1, 4($sp)
-    lw $t2, 0($sp)
-    addi $sp, $sp, 12
-    jr $ra
-
-play_melody:
-    addi $sp, $sp, -12
-    sw $ra, 8($sp)
-    sw $t0, 4($sp)
-    sw $t1, 0($sp)
-    
-    la $t0, intro_melody
-    la $t1, intro_rhythm
-    li $t2, 13
-noteLoop:
-    lw $a1, ($t0)
-    lw $a0, ($t1)
-    
-    mul $a0, $a0, 100
-    
-    jal generateTone
-    
-    addi $t0, $t0, 4
-    addi $t1, $t1, 4
-    addi $t2, $t2, -1
-    bne $t2, $zero, noteLoop
-
-    lw $ra, 8($sp)
-    lw $t0, 4($sp)
-    lw $t1, 0($sp)
-    addi $sp, $sp, 12
-    jr $ra
+    sw $ra, ($sp)
+    sw $s0, 4($sp)
+ # $a0 freq, #a1 rhythm
+    beq $a0, -1, rest
+    sw $zero, TRISE
+    calculate_delay:
+	add $t0, $a0, $zero
+	
+	# 8Mhz from PIC
+	li $t1, 8000000
+	li $t2, 1
+	div $t2, $t1
+	mflo $t3
+	# $t3 period of internal clk
+	div $t2, $a0
+	mflo $t2
+	mul $t2, $t2,2
+	div $t2, $t3
+	mflo $t4
+	sw $t4, buffer
+	# $t4 = number of clk ticks for half period of desired freq
+    # counter
+    toneLoop:
+	# high
+	li $t3, 0x1
+	sw $t3, PORTE
+	
+	lw $a0, buffer
+	jal toneDelay
+	
+	# low
+	sw $zero, PORTE
+	
+	lw $a0, buffer
+	jal toneDelay
+	bne $s1, $zero, toneLoop
+	j endTone
+	
+    toneDelay:
+	addi $sp, $sp, -12
+	sw $ra, ($sp)
+	sw $s0, 4($sp)
+	sw $s1, 8($sp)
+	add $t3, $a0, $zero
+	delay_loop:
+	    beq $t3, $zero, end_delay
+	    addi $t3, $t3, -1
+	    j delay_loop
+	end_delay:
+	    lw $ra, ($sp)
+	    lw $s0, 4($sp)
+	    lw $s1, 8($sp)
+	    addi $sp, $sp, 12
+	    jr $ra
+    endTone:
+	lw $ra, ($sp)
+	lw $s0, 4($sp)
+	addi $sp, $sp, 4
+	jr $ra
+	
+    rest:
+	
+	lw $ra, ($sp)
+	lw $s0, 4($sp)
+	addi $sp, $sp, 4
+	jr $ra
