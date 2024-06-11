@@ -20,9 +20,9 @@
       <itemPath>driverOled.s</itemPath>
       <itemPath>main.s</itemPath>
       <itemPath>driverBuzzer.s</itemPath>
-      <itemPath>bitmap_test.s</itemPath>
       <itemPath>driverKeyboard.s</itemPath>
       <itemPath>config.c</itemPath>
+      <itemPath>decode_char.s</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>

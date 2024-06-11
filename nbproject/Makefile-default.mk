@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s bitmap_test.s driverKeyboard.s config.c
+SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/bitmap_test.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/bitmap_test.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/bitmap_test.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o
+OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o
 
 # Source Files
-SOURCEFILES=driverOled.s main.s driverBuzzer.s bitmap_test.s driverKeyboard.s config.c
+SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s
 
 
 
@@ -104,15 +104,15 @@ ${OBJECTDIR}/driverBuzzer.o: driverBuzzer.s  .generated_files/flags/default/6729
 	@${RM} ${OBJECTDIR}/driverBuzzer.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverBuzzer.o driverBuzzer.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/driverBuzzer.o.d" -mdfp="${DFP_DIR}"
 	
-${OBJECTDIR}/bitmap_test.o: bitmap_test.s  .generated_files/flags/default/20ec520b512a9714001039c125b1f951de126dd8 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/bitmap_test.o 
-	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/bitmap_test.o bitmap_test.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/bitmap_test.o.d" -mdfp="${DFP_DIR}"
-	
 ${OBJECTDIR}/driverKeyboard.o: driverKeyboard.s  .generated_files/flags/default/2f2d36998b25c227061846aefa7ac54fae5ea227 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/driverKeyboard.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverKeyboard.o driverKeyboard.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/driverKeyboard.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/decode_char.o: decode_char.s  .generated_files/flags/default/b368c500691e6cadd45215e63c991c30002ab172 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/decode_char.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/decode_char.o decode_char.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/decode_char.o.d" -mdfp="${DFP_DIR}"
 	
 else
 ${OBJECTDIR}/driverOled.o: driverOled.s  .generated_files/flags/default/31a302394ccc57d488ae46d713f4ba802bdd52f5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
@@ -130,15 +130,15 @@ ${OBJECTDIR}/driverBuzzer.o: driverBuzzer.s  .generated_files/flags/default/9ff8
 	@${RM} ${OBJECTDIR}/driverBuzzer.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverBuzzer.o driverBuzzer.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/driverBuzzer.o.d" -mdfp="${DFP_DIR}"
 	
-${OBJECTDIR}/bitmap_test.o: bitmap_test.s  .generated_files/flags/default/9e030790cba415c012ebe6ea7d58f20b28bab92 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/bitmap_test.o 
-	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/bitmap_test.o bitmap_test.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/bitmap_test.o.d" -mdfp="${DFP_DIR}"
-	
 ${OBJECTDIR}/driverKeyboard.o: driverKeyboard.s  .generated_files/flags/default/b462698eb0db3dadbf9d9d48350b450d7c6ba447 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/driverKeyboard.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverKeyboard.o driverKeyboard.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/driverKeyboard.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/decode_char.o: decode_char.s  .generated_files/flags/default/d33c4f7c4a015f91c1f7235666cb2a108f74bad3 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/decode_char.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/decode_char.o decode_char.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/decode_char.o.d" -mdfp="${DFP_DIR}"
 	
 endif
 

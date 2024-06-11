@@ -9,8 +9,9 @@
 .globl	    send_1306
 .globl	    delay
 .globl	    print_bitmap
+.globl	    clear_display
 .data
-
+    
 .text
 # pin/port config
     # D0 -> SCK1
@@ -161,18 +162,36 @@ init_ssd1306:
 	li $a1, 0x1
 	jal send_1306
 	
-	li $s0, 0
-	clear_display:
-	    li $a0, 0x00
-	    li $a1, 0x3
-	    jal send_1306
-	    addi $s0, $s0, 1
-	    bne $s0, 1024, clear_display
+	jal clear_display
 	
 	
 	
     lw	    $ra, ($sp)
     addi    $sp, $sp, 4
+    jr	    $ra
+clear_display:
+    addi    $sp, $sp, -24
+    sw	    $ra, ($sp)
+    sw	    $s0, 4($sp)
+    sw	    $s1, 8($sp)
+    sw	    $s2, 12($sp)
+    sw	    $s3, 16($sp)
+    sw	    $s4, 20($sp)
+    
+    li $s0, 0
+	clear_display_loop:
+	    li $a0, 0x00
+	    li $a1, 0x3
+	    jal send_1306
+	    addi $s0, $s0, 1
+	    bne $s0, 1024, clear_display_loop
+    lw	    $ra, ($sp)
+    lw	    $s0, 4($sp)
+    lw	    $s1, 8($sp)
+    lw	    $s2, 12($sp)
+    lw	    $s3, 16($sp)
+    lw	    $s4, 20($sp)
+    addi    $sp, $sp, 24
     jr	    $ra
 # send_1306($a0 byte, $a1 pinState)
     # $a1 can be 0x1 for commands or 0x3 for data
@@ -221,7 +240,9 @@ delay:
     jr      $ra
     
     
-# print_bitmap($a0 bitmap)
+# print_bitmap($a0 bitmap (by), $a1 page/column (hw), $a2 dimension (hw))
+    # hw: 0xaabb aa = pageI or pageF, bb = columnI or columnF
+    # dimensions are sent in column / pages
 print_bitmap:
     addi    $sp, $sp, -20
     sw	    $ra, ($sp)
@@ -229,16 +250,64 @@ print_bitmap:
     sw	    $s1, 8($sp)
     sw	    $s2, 12($sp)
     sw	    $s3, 16($sp)
+    
+    
 	
-    add	    $s0, $a0, $zero	
-    li	    $s1, 0
+    # $s0 = bitmap
+    add	$s0, $a0, $zero
+    add $s1, $a1, $zero
+    add $s2, $a2, $zero
+    
+    andi $t0, $s1, 0xFF00
+    srl $t0, $t0, 8
+    andi $t1, $s2, 0xFF00
+    srl $t1, $t1, 8
+    addi $t1, $t1, 1
+    sub $t0, $t1, $t0
+    andi $t1, $s1, 0xFF
+    andi $t2, $s2, 0xFF
+    addi $t2, $t2, 1
+    sub $t1, $t2, $t1
+    mul $s3, $t1, $t0
+
+    # Cursor setting
+    
+    # Column adress
+    li $a0, 0x21
+    li $a1, 0x1
+    jal send_1306
+	
+    andi $a0, $s1, 0xFF00
+    li $a1, 0x1
+    jal send_1306
+    
+    andi $a0, $s2, 0xFF00
+    li $a0, 0x7F
+    li $a1, 0x1
+    jal send_1306
+    
+    # Page adress
+    li $a0, 0x22
+    li $a1, 0x1
+    jal send_1306
+	
+    andi $a0, $s1, 0xFF
+    li $a0, 0
+    li $a1, 0x1
+    jal send_1306
+    
+    andi $a0, $s2, 0xFF
+    li $a0, 0x07
+    li $a1, 0x1
+    jal send_1306
+    
     print_loop:
 	lb	$a0, ($s0)
 	li	$a1, 0x3
 	jal	send_1306
 	addi	$s1, $s1, 1
 	addi	$s0, $s0, 1
-	bne	$s1, 1024, print_loop
+	bne	$s1, $s3, print_loop
 
     lw	    $s3, 16($sp)
     lw	    $s2, 12($sp)

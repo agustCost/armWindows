@@ -34,7 +34,7 @@ buffer: .word 0
 	add $t0, $a0, $zero
 	
 	# 8Mhz from PIC
-	li $t1, 8000000
+	li $t1, 1500000
 	li $t2, 1
 	div $t2, $t1
 	mflo $t3
