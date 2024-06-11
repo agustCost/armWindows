@@ -10,11 +10,8 @@
 	jal init_ssd1306
 	jal clear_display
 	jal keyboard_check
-	beq $v0, 1, weGood
-	j loop
-	weGood:
-	    li $a0, 78
-	    jal print_char
+	add $a0, $v0, $zero
+	jal print_char
 
 	
 	

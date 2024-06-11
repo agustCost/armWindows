@@ -40,18 +40,93 @@ keyboard_check:
 	sw $t0, PORTE
 	lw $t0, PORTE
 	bgt $t0, 8, pressed_row4
-	j start_mapping
+	li $v0, 0
+	j end_check
 	
     pressed_row1:
-	li $v0, 1
+	lw $t0, PORTE
+	beq $t0, 0x11, case1_row1
+	beq $t0, 0x21, case2_row1
+	beq $t0, 0x41, case3_row1
+	beq $t0, 0x81, case4_row1
+	j start_mapping
+	case1_row1:
+	    # ascii
+	    li $v0, 49
+	    j end_check
+	case2_row1:
+	    li $v0, 65
+	    j end_check
+	case3_row1:
+	    li $v0, 68
+	    j end_check
+	case4_row1:
+	    # esc - 0xF0
+	    li $v0, 0xF0
+	    j end_check
 	
 	
     pressed_row2:
-    
+	lw $t0, PORTE
+	beq $t0, 0x12, case1_row2
+	beq $t0, 0x22, case2_row2
+	beq $t0, 0x42, case3_row2
+	beq $t0, 0x82, case4_row2
+	j start_mapping
+	case1_row2:
+	    # ascii
+	    li $v0, 49
+	    j end_check
+	case2_row2:
+	    li $v0, 65
+	    j end_check
+	case3_row2:
+	    li $v0, 68
+	    j end_check
+	case4_row2:
+	    # esc - 0xF0
+	    li $v0, 0xF0
+	    j end_check
     pressed_row3:
-    
+	beq $t0, 0x14, case1_row3
+	beq $t0, 0x24, case2_row3
+	beq $t0, 0x44, case3_row3
+	beq $t0, 0x84, case4_row3
+	j start_mapping
+	case1_row3:
+	    # ascii
+	    li $v0, 49
+	    j end_check
+	case2_row3:
+	    li $v0, 65
+	    j end_check
+	case3_row3:
+	    li $v0, 68
+	    j end_check
+	case4_row3:
+	    # esc - 0xF0
+	    li $v0, 0xF0
+	    j end_check
     pressed_row4:
-	
+	beq $t0, 0x18, case1_row4
+	beq $t0, 0x28, case2_row4
+	beq $t0, 0x48, case3_row4
+	beq $t0, 0x88, case4_row4
+	j start_mapping
+	case1_row4:
+	    # ascii
+	    li $v0, 49
+	    j end_check
+	case2_row4:
+	    li $v0, 65
+	    j end_check
+	case3_row4:
+	    li $v0, 68
+	    j end_check
+	case4_row4:
+	    # esc - 0xF0
+	    li $v0, 0xF0
+	    j end_check
     end_check:
 	lw	    $s3, 16($sp)
 	lw	    $s2, 12($sp)
