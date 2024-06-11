@@ -9,24 +9,8 @@
 	jal init_spi
 	jal init_ssd1306
 	jal clear_display
-	animation:
-	li $s0, 0
-	la $a0, uno
-	li $a1, 0x0000
-	li $a2, 0x7F07
-	jal print_bitmap
-	jal delay
-	jal delay
-	jal delay
-	la $a0, dos
-	li $a1, 0x0000
-	li $a2, 0x7F07
-	jal print_bitmap
-	jal delay
-	jal delay
-	jal delay
-	jal delay
-	j animation
+	li $a0, 41
+	jal print_char
 	
 
 	
