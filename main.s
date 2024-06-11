@@ -9,7 +9,7 @@
 	jal init_spi
 	jal init_ssd1306
 	jal clear_display
-	li $a0, 41
+	li $a0, 65
 	jal print_char
 	
 

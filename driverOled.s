@@ -240,7 +240,8 @@ delay:
     jr      $ra
     
     
-# print_bitmap($a0 bitmap (by), $a1 page/column (hw), $a2 dimension (hw))
+    # $a0 bimap, $a1 colI/pageI, $a2 colF/pageF
+# print_bitmap($a0 bitmap (by), $a1 page/column (hw), $a2 dimension (hw), $a3 0x1 if transpose, 0x0 if as is)
     # hw: 0xaabb aa = pageI or pageF, bb = columnI or columnF
     # dimensions are sent in column / pages
 print_bitmap:
@@ -278,11 +279,16 @@ print_bitmap:
     jal send_1306
 	
     andi $a0, $s1, 0xFF00
+    srl $a0, $a0, 8
+    jal interpret_digits
+    add $a0, $v0, $zero
     li $a1, 0x1
     jal send_1306
     
     andi $a0, $s2, 0xFF00
-    li $a0, 0x7F
+    srl $a0, $a0, 8
+    jal interpret_digits
+    add $a0, $v0, $zero
     li $a1, 0x1
     jal send_1306
     
@@ -292,12 +298,16 @@ print_bitmap:
     jal send_1306
 	
     andi $a0, $s1, 0xFF
-    li $a0, 0
+    srl $a0, $a0, 8
+    jal interpret_digits
+    add $a0, $v0, $zero
     li $a1, 0x1
     jal send_1306
     
     andi $a0, $s2, 0xFF
-    li $a0, 0x07
+    srl $a0, $a0, 8
+    jal interpret_digits
+    addi $a0, $v0, $zero
     li $a1, 0x1
     jal send_1306
     

@@ -9,7 +9,7 @@
     # FUnction xddd
     # $a0 -> character in ascii
     print_char:
-	addi    $sp, $sp, -20
+	addi	    $sp, $sp, -20
 	sw	    $ra, ($sp)
 	sw	    $s0, 4($sp)
 	sw	    $s1, 8($sp)
@@ -17,15 +17,14 @@
 	sw	    $s3, 16($sp)
 	
 	
-	beq $a0, $zero, endLine
+	beq	    $a0, $zero, endLine
 	
 	# cargar bitmap
 	la $t0, characters
-	addi $t1, $a0, -20
+	addi $t1, $a0, -32
 	mul $t1, $t1, 8
-	add $t0, $t1, $t0
-	
-	lb $a0, ($t0)
+	add $a0, $t1, $t0
+
 	# handle $a0, transpose!
 	
 	# cargar inicial
