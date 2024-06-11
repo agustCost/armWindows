@@ -196,13 +196,14 @@ clear_display:
 # send_1306($a0 byte, $a1 pinState)
     # $a1 can be 0x1 for commands or 0x3 for data
 send_1306:
-    addi    $sp, $sp, -24
+    addi    $sp, $sp, -28
     sw	    $ra, ($sp)
     sw	    $s0, 4($sp)
     sw	    $s1, 8($sp)
     sw	    $s2, 12($sp)
     sw	    $s3, 16($sp)
     sw	    $s4, 20($sp)
+    sw	    $s5, 24($sp)
     
     # DC# low for commands
     # DC# high for data
@@ -223,7 +224,8 @@ send_1306:
     lw	    $s2, 12($sp)
     lw	    $s3, 16($sp)
     lw	    $s4, 20($sp)
-    addi    $sp, $sp, 24
+    lw	    $s5, 24($sp)
+    addi    $sp, $sp, 28
     jr	    $ra
 delay:
     addi    $sp, $sp, -4
@@ -240,10 +242,7 @@ delay:
     jr      $ra
     
     
-    # $a0 bimap, $a1 colI/pageI, $a2 colF/pageF
-# print_bitmap($a0 bitmap (by), $a1 page/column (hw), $a2 dimension (hw), $a3 0x1 if transpose, 0x0 if as is)
-    # hw: 0xaabb aa = pageI or pageF, bb = columnI or columnF
-    # dimensions are sent in column / pages
+# print_bitmap($a0 bitmap (by), $a1 columnI/pageI, $a2 dimension(h/w))
 print_bitmap:
     addi    $sp, $sp, -20
     sw	    $ra, ($sp)
@@ -258,66 +257,63 @@ print_bitmap:
     add	$s0, $a0, $zero
     add $s1, $a1, $zero
     add $s2, $a2, $zero
+    add $s5, $a3, $zero
     
-    andi $t0, $s1, 0xFF00
+    
+    andi $t0, $s2, 0xFF00
     srl $t0, $t0, 8
-    andi $t1, $s2, 0xFF00
-    srl $t1, $t1, 8
-    addi $t1, $t1, 1
-    sub $t0, $t1, $t0
-    andi $t1, $s1, 0xFF
-    andi $t2, $s2, 0xFF
-    addi $t2, $t2, 1
-    sub $t1, $t2, $t1
+    andi $t1, $s2, 0xFF
+    div $t1, 8
+    mflo $t1
     mul $s3, $t1, $t0
 
     # Cursor setting
     
     # Column adress
-    li $a0, 0x21
-    li $a1, 0x1
-    jal send_1306
+    li	    $a0, 0x21
+    li	    $a1, 0x1
+    jal	    send_1306
 	
-    andi $a0, $s1, 0xFF00
-    srl $a0, $a0, 8
-    jal interpret_digits
-    add $a0, $v0, $zero
-    li $a1, 0x1
-    jal send_1306
+    andi    $a0, $s1, 0xFF00
+    srl	    $a0, $a0, 8
+    li	    $a1, 0x1
+    jal	    send_1306
     
-    andi $a0, $s2, 0xFF00
-    srl $a0, $a0, 8
-    jal interpret_digits
-    add $a0, $v0, $zero
-    li $a1, 0x1
-    jal send_1306
+    andi $t0, $s1, 0xFF00
+    srl $t0, $t0, 8
+    andi $t1, $s2, 0xFF00
+    srl $t1, $t1, 8
+    addi $t1, $t1, -1
+    add $a0, $t1, $t0
+    li	    $a1, 0x1
+    jal	    send_1306
     
     # Page adress
-    li $a0, 0x22
-    li $a1, 0x1
-    jal send_1306
+    li	    $a0, 0x22
+    li	    $a1, 0x1
+    jal	    send_1306
 	
-    andi $a0, $s1, 0xFF
-    srl $a0, $a0, 8
-    jal interpret_digits
-    add $a0, $v0, $zero
-    li $a1, 0x1
-    jal send_1306
+    andi    $a0, $s1, 0xFF
+    li	    $a1, 0x1
+    jal	    send_1306
     
-    andi $a0, $s2, 0xFF
-    srl $a0, $a0, 8
-    jal interpret_digits
-    addi $a0, $v0, $zero
-    li $a1, 0x1
-    jal send_1306
+    andi    $t0, $s2, 0xFF
+    div	    $t0, 8
+    mflo    $t0
+    addi    $a0, $t0, -1
+    li	    $a1, 0x1
+    jal	    send_1306
+    
+
+    li $s4, 0
     
     print_loop:
 	lb	$a0, ($s0)
 	li	$a1, 0x3
 	jal	send_1306
-	addi	$s1, $s1, 1
+	addi	$s4, $s4, 1
 	addi	$s0, $s0, 1
-	bne	$s1, $s3, print_loop
+	bne	$s4, $s3, print_loop
 
     lw	    $s3, 16($sp)
     lw	    $s2, 12($sp)
@@ -326,4 +322,4 @@ print_bitmap:
     lw	    $ra, ($sp)
     addi    $sp, $sp, 20
     jr	    $ra
-	    
+    
