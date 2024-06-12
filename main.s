@@ -10,12 +10,13 @@
 	jal init_ssd1306
 	jal clear_display
 	jal init_timeModule
-	jal print_time
 
-	
-	
 	loop:
-	    j loop
+	jal reset_position
+	jal print_time
+	
+	
+	j loop
 .end main
 
 
