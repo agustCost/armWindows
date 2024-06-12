@@ -14,7 +14,7 @@
 	loop:
 	jal reset_position
 	jal print_time
-	
+	jal delay
 	
 	j loop
 .end main
