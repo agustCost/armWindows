@@ -9,12 +9,9 @@
 	jal init_spi
 	jal init_ssd1306
 	jal clear_display
-	jal keyboard_check
-	add $a0, $v0, $zero
-	jal print_char
+	jal init_timeModule
+	jal print_time
 
-	
-	
 	
 	
 	loop:

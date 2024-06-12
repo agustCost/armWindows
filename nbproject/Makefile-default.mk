@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s
+SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o
+OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o
 
 # Source Files
-SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s
+SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s
 
 
 
@@ -114,6 +114,11 @@ ${OBJECTDIR}/decode_char.o: decode_char.s  .generated_files/flags/default/b368c5
 	@${RM} ${OBJECTDIR}/decode_char.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/decode_char.o decode_char.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/decode_char.o.d" -mdfp="${DFP_DIR}"
 	
+${OBJECTDIR}/driverTime.o: driverTime.s  .generated_files/flags/default/627eb250d14e23fb682a1e1b080a0ba329b1cb28 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/driverTime.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverTime.o driverTime.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/driverTime.o.d" -mdfp="${DFP_DIR}"
+	
 else
 ${OBJECTDIR}/driverOled.o: driverOled.s  .generated_files/flags/default/31a302394ccc57d488ae46d713f4ba802bdd52f5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
@@ -139,6 +144,11 @@ ${OBJECTDIR}/decode_char.o: decode_char.s  .generated_files/flags/default/d33c4f
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/decode_char.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/decode_char.o decode_char.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/decode_char.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/driverTime.o: driverTime.s  .generated_files/flags/default/b63bc4747cd995dd4b0d902659be4041dca5387c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/driverTime.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverTime.o driverTime.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/driverTime.o.d" -mdfp="${DFP_DIR}"
 	
 endif
 
