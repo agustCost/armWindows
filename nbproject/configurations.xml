@@ -24,6 +24,9 @@
       <itemPath>config.c</itemPath>
       <itemPath>decode_char.s</itemPath>
       <itemPath>driverTime.s</itemPath>
+      <itemPath>app_RPNcalculator.s</itemPath>
+      <itemPath>app_ROT13encryption.s</itemPath>
+      <itemPath>utilities.s</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>

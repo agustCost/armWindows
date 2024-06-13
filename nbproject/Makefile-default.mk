@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s
+SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d ${OBJECTDIR}/app_RPNcalculator.o.d ${OBJECTDIR}/app_ROT13encryption.o.d ${OBJECTDIR}/utilities.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o
+OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o
 
 # Source Files
-SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s
+SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s
 
 
 
@@ -119,6 +119,21 @@ ${OBJECTDIR}/driverTime.o: driverTime.s  .generated_files/flags/default/627eb250
 	@${RM} ${OBJECTDIR}/driverTime.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverTime.o driverTime.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/driverTime.o.d" -mdfp="${DFP_DIR}"
 	
+${OBJECTDIR}/app_RPNcalculator.o: app_RPNcalculator.s  .generated_files/flags/default/bd82e57570563793f9d6ecfab58cc7e91519097f .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/app_RPNcalculator.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/app_RPNcalculator.o app_RPNcalculator.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/app_RPNcalculator.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/app_ROT13encryption.o: app_ROT13encryption.s  .generated_files/flags/default/b7663d9eb6ec6c01a61720517e0f295f5f6a28b3 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/app_ROT13encryption.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/app_ROT13encryption.o app_ROT13encryption.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/app_ROT13encryption.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/utilities.o: utilities.s  .generated_files/flags/default/ac678129c05b719f2ddc7d185bb8e800fc317054 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/utilities.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/utilities.o utilities.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/utilities.o.d" -mdfp="${DFP_DIR}"
+	
 else
 ${OBJECTDIR}/driverOled.o: driverOled.s  .generated_files/flags/default/31a302394ccc57d488ae46d713f4ba802bdd52f5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
@@ -149,6 +164,21 @@ ${OBJECTDIR}/driverTime.o: driverTime.s  .generated_files/flags/default/b63bc474
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/driverTime.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverTime.o driverTime.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/driverTime.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/app_RPNcalculator.o: app_RPNcalculator.s  .generated_files/flags/default/7f078a923ec657ed00af4df74e9bed688803b1d1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/app_RPNcalculator.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/app_RPNcalculator.o app_RPNcalculator.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/app_RPNcalculator.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/app_ROT13encryption.o: app_ROT13encryption.s  .generated_files/flags/default/f62c5075f609317006293da54013a569cbe27b4e .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/app_ROT13encryption.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/app_ROT13encryption.o app_ROT13encryption.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/app_ROT13encryption.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/utilities.o: utilities.s  .generated_files/flags/default/532a9bc0a043c331b396d940f57b4658f64b00c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/utilities.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/utilities.o utilities.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/utilities.o.d" -mdfp="${DFP_DIR}"
 	
 endif
 

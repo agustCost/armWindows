@@ -1,10 +1,9 @@
 .globl keyboard_check
 .data
-     
 .text
     
 # Set pins as input/output
-keyboard_check:
+keyboard_read:
     addi    $sp, $sp, -20
     sw	    $ra, ($sp)
     sw	    $s0, 4($sp)
@@ -23,7 +22,7 @@ keyboard_check:
     lw	    $t1, PORTE
     bgt	    $t1, 0xF, pressed_btn
     li	    $v0, 0
-    j	    end_check
+    j	    end_read
     pressed_btn:
 	li	$t0, 0x1
 	sw	$t0, PORTE
@@ -42,7 +41,7 @@ keyboard_check:
 	lw	$t0, PORTE
 	bgt	$t0, 8, pressed_row4
 	li	$v0, 0
-	j	end_check
+	j	end_read
 	
     pressed_row1:
 	lw	$t0, PORTE
@@ -54,17 +53,17 @@ keyboard_check:
 	case1_row1:
 	    # ascii
 	    li	    $v0, 49
-	    j	    end_check
+	    j	    end_read
 	case2_row1:
 	    li	    $v0, 65
-	    j	    end_check
+	    j	    end_read
 	case3_row1:
 	    li	    $v0, 68
-	    j	    end_check
+	    j	    end_read
 	case4_row1:
 	    # esc - 0xF0
 	    li	    $v0, 0xF0
-	    j	    end_check
+	    j	    end_read
 	
 	
     pressed_row2:
@@ -77,17 +76,17 @@ keyboard_check:
 	case1_row2:
 	    # ascii
 	    li	    $v0, 49
-	    j	    end_check
+	    j	    end_read
 	case2_row2:
 	    li	    $v0, 65
-	    j	    end_check
+	    j	    end_read
 	case3_row2:
 	    li	    $v0, 68
-	    j	    end_check
+	    j	    end_read
 	case4_row2:
 	    # esc - 0xF0
 	    li	    $v0, 0xF0
-	    j	    end_check
+	    j	    end_read
     pressed_row3:
 	beq	    $t0, 0x14, case1_row3
 	beq	    $t0, 0x24, case2_row3
@@ -97,17 +96,17 @@ keyboard_check:
 	case1_row3:
 	    # ascii
 	    li $v0, 49
-	    j end_check
+	    j end_read
 	case2_row3:
 	    li $v0, 65
-	    j end_check
+	    j end_read
 	case3_row3:
 	    li $v0, 68
-	    j end_check
+	    j end_read
 	case4_row3:
 	    # esc - 0xF0
 	    li $v0, 0xF0
-	    j end_check
+	    j end_read
     pressed_row4:
 	beq $t0, 0x18, case1_row4
 	beq $t0, 0x28, case2_row4
@@ -117,18 +116,18 @@ keyboard_check:
 	case1_row4:
 	    # ascii
 	    li $v0, 49
-	    j end_check
+	    j end_read
 	case2_row4:
 	    li $v0, 65
-	    j end_check
+	    j end_read
 	case3_row4:
 	    li $v0, 68
-	    j end_check
+	    j end_read
 	case4_row4:
 	    # esc - 0xF0
 	    li $v0, 0xF0
-	    j end_check
-    end_check:
+	    j end_read
+    end_read:
 	lw	    $s3, 16($sp)
 	lw	    $s2, 12($sp)
 	lw	    $s1, 8($sp)
@@ -136,6 +135,35 @@ keyboard_check:
 	lw	    $ra, ($sp)
 	addi	    $sp, $sp, 20
 	jr	    $ra
-	
+		
 
+   keyboard_check:
+    addi    $sp, $sp, -20
+    sw	    $ra, ($sp)
+    sw	    $s0, 4($sp)
+    sw	    $s1, 8($sp)
+    sw	    $s2, 12($sp)
+    sw	    $s3, 16($sp)
+	jal keyboard_read
+	add $s1, $v0, $zero
+	li $a0, 1000
+	jal delay
+	jal keyboard_read
+	bne $s1, $v0, discard
+	wait_for_release:
+	    jal keyboard_read
+	    bne $v0, $zero, wait_for_release
+	j end_check
+	discard:
+	    add	    $v0, $zero, $zero
+	end_check:
+	    add	    $v0, $s1, $zero
+	    lw	    $s3, 16($sp)
+	    lw	    $s2, 12($sp)
+	    lw	    $s1, 8($sp)
+	    lw	    $s0, 4($sp)
+	    lw	    $ra, ($sp)
+	    addi    $sp, $sp, 20
+	    jr		$ra
+	    
 

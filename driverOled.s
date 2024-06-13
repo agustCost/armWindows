@@ -7,7 +7,6 @@
 .globl	    init_spi
 .globl	    init_ssd1306
 .globl	    send_1306
-.globl	    delay
 .globl	    print_bitmap
 .globl	    clear_display
 .data
@@ -39,7 +38,7 @@ init_spi:
     addi	$sp, $sp, -4
     sw		$ra, ($sp)
 
-    jal		delay
+    jal		delay_spi
     
     # Disable interrupts
     li		$t0, 0x03800000
@@ -71,19 +70,19 @@ init_ssd1306:
     addi	$sp, $sp, -4
     sw		$ra, ($sp)
 
-    jal		delay
+    jal		delay_spi
     # Power ON sequence based on datasheet
     
     # RES# low
     li		$t0, 0x0
     sw		$t0, PORTD
     # Hold for at least 3us
-    jal		delay        
+    jal		delay_spi        
     # RES# high
     li		$t0, 0x1
     sw		$t0, PORTD
 
-    jal		delay
+    jal		delay_spi
     # SSD1306 initialization
 	# OFF
 	li	$a1, 0x1
@@ -227,15 +226,15 @@ send_1306:
     lw	    $s5, 24($sp)
     addi    $sp, $sp, 28
     jr	    $ra
-delay:
+delay_spi:
     addi    $sp, $sp, -4
     sw	    $ra, ($sp)
 
     li	    $t0, 5000
 
-    delay_loop:
+    delay_spi_loop:
     addi    $t0, $t0, -1
-    bne	    $t0, $zero, delay_loop
+    bne	    $t0, $zero, delay_spi_loop
 
     lw	    $ra, ($sp)
     addi    $sp, $sp, 4
