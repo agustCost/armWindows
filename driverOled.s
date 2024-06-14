@@ -3,6 +3,7 @@
 # setup.
 # send_1306 consists of a writeCommand and writeData, which are implemented 
 # using a 3-wire SPI transmission system.
+# print_bitmap follows the logic found in the adafruit library
 .globl	    init_pin1306
 .globl	    init_spi
 .globl	    init_ssd1306
@@ -250,15 +251,12 @@ print_bitmap:
     sw	    $s2, 12($sp)
     sw	    $s3, 16($sp)
     
-    
-	
-    # $s0 = bitmap
     add	$s0, $a0, $zero
     add $s1, $a1, $zero
     add $s2, $a2, $zero
     add $s5, $a3, $zero
     
-    
+    # Size calculation (bytes)
     andi $t0, $s2, 0xFF00
     srl $t0, $t0, 8
     andi $t1, $s2, 0xFF

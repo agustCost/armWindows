@@ -1,8 +1,20 @@
 .globl keyboard_check
 .data
 .text
+# This file contains the main driver for the usage of the T0308 membrane keyboard
+# It has an integrated debounce of 1000 cpu clock signals
+# It considers a time of XX for the bla bla bla
+    # pin/port config
+    # RE0 thru RE7
     
-# Set pins as input/output
+# Keyboard_read iterates thru the keyboard matrix and returns a read value in $v0
+# Return values are ascii coded, with the exception of A, B, C and D keys
+# that return the following values:
+#   A -> 0xFF
+#   B -> 0xFE
+#   C -> 0xFB
+#   D -> 0xF7  
+
 keyboard_read:
     addi    $sp, $sp, -20
     sw	    $ra, ($sp)
@@ -12,7 +24,7 @@ keyboard_read:
     sw	    $s3, 16($sp)
     
     
-    
+
     li	    $t0, 0xF0
     sw	    $t0, TRISE
     start_mapping:
@@ -55,10 +67,10 @@ keyboard_read:
 	    li	    $v0, 49
 	    j	    end_read
 	case2_row1:
-	    li	    $v0, 65
+	    li	    $v0, 50
 	    j	    end_read
 	case3_row1:
-	    li	    $v0, 68
+	    li	    $v0, 51
 	    j	    end_read
 	case4_row1:
 	    # esc - 0xF0
@@ -75,13 +87,13 @@ keyboard_read:
 	j	start_mapping
 	case1_row2:
 	    # ascii
-	    li	    $v0, 49
+	    li	    $v0, 52
 	    j	    end_read
 	case2_row2:
-	    li	    $v0, 65
+	    li	    $v0, 53
 	    j	    end_read
 	case3_row2:
-	    li	    $v0, 68
+	    li	    $v0, 54
 	    j	    end_read
 	case4_row2:
 	    # esc - 0xF0
@@ -95,13 +107,13 @@ keyboard_read:
 	j	start_mapping
 	case1_row3:
 	    # ascii
-	    li $v0, 49
+	    li $v0, 55
 	    j end_read
 	case2_row3:
-	    li $v0, 65
+	    li $v0, 56
 	    j end_read
 	case3_row3:
-	    li $v0, 68
+	    li $v0, 57
 	    j end_read
 	case4_row3:
 	    # esc - 0xF0
@@ -115,17 +127,16 @@ keyboard_read:
 	j start_mapping
 	case1_row4:
 	    # ascii
-	    li $v0, 49
+	    li $v0, 42
 	    j end_read
 	case2_row4:
-	    li $v0, 65
+	    li $v0, 48
 	    j end_read
 	case3_row4:
-	    li $v0, 68
+	    li $v0, 35
 	    j end_read
 	case4_row4:
-	    # esc - 0xF0
-	    li $v0, 0xF0
+	    li $v0, 0xF7
 	    j end_read
     end_read:
 	lw	    $s3, 16($sp)
@@ -137,33 +148,37 @@ keyboard_read:
 	jr	    $ra
 		
 
-   keyboard_check:
+# Keyboard_check is a debounce function that double checks the keyboard input
+# and waits for its release. Return is given in $v0, following the logic of
+# keyboard_read
+keyboard_check:
     addi    $sp, $sp, -20
     sw	    $ra, ($sp)
     sw	    $s0, 4($sp)
     sw	    $s1, 8($sp)
     sw	    $s2, 12($sp)
     sw	    $s3, 16($sp)
-	jal keyboard_read
-	add $s1, $v0, $zero
-	li $a0, 1000
-	jal delay
-	jal keyboard_read
-	bne $s1, $v0, discard
-	wait_for_release:
-	    jal keyboard_read
-	    bne $v0, $zero, wait_for_release
-	j end_check
-	discard:
-	    add	    $v0, $zero, $zero
-	end_check:
-	    add	    $v0, $s1, $zero
-	    lw	    $s3, 16($sp)
-	    lw	    $s2, 12($sp)
-	    lw	    $s1, 8($sp)
-	    lw	    $s0, 4($sp)
-	    lw	    $ra, ($sp)
-	    addi    $sp, $sp, 20
-	    jr		$ra
+    
+    jal	    keyboard_read
+    add	    $s1, $v0, $zero
+    li	    $a0, 1000
+    jal	    delay
+    jal	    keyboard_read
+    bne	    $s1, $v0, discard
+    wait_for_release:
+	jal	keyboard_read
+	bne	$v0, $zero, wait_for_release
+	j	end_check
+    discard:
+	add	$v0, $zero, $zero
+    end_check:
+	add	$v0, $s1, $zero
+	lw	$s3, 16($sp)
+	lw	$s2, 12($sp)
+	lw	$s1, 8($sp)
+	lw	$s0, 4($sp)
+	lw	$ra, ($sp)
+	addi    $sp, $sp, 20
+	jr	$ra
 	    
 
