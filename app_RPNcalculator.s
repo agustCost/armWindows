@@ -8,21 +8,24 @@
     current_iteration: .byte 0x0
     input_flag: .byte 0x0
     
+    
     selected_operation: .byte 0x0
     
     
     buffer1: .word 0
     buffer2: .word 0
- 
-    str_stack: .byte 83, 116, 97, 99, 107, 58
+    
+    str_current_type: .byte 0x5F, 0x5F, 0x5F, 0x5F
+    str_stack: .asciiz "Stack: "
 .text
     execCalc:
 	jal clear_display
 	la $a0, str_stack
-	li $a1, 7
+	la $a1, 0x0B00
 	jal print_str
 	jal print_stack
 	read_input:
+	    jal print_typing
 	    jal keyboard_check
 	    
 	    beq $v0, $zero, read_input
@@ -39,7 +42,7 @@
 		addi $v0, $v0, -48
 		sb $v0, ($t1)
 		addi $t0, $t0, 1
-		beq $t0, 5, end_and_convert
+		beq $t0, 4, end_and_convert
 		sb $t0, current_iteration
 		j read_input
 		
@@ -52,10 +55,11 @@
 		lb $t0, selected_operation
 		addi $t0, $t0, 1
 		beq $t0, 5, start_over
+		sb $t0, selected_operation
 		j read_input
 		
 		start_over:
-		    lw $zero, operation_select
+		    sb $zero, selected_operation
 		    j read_input
 		
 	    end_read:
@@ -63,7 +67,7 @@
 	    beq $t1, $zero, read_input
 	    end_and_convert:
 		lb $zero, input_flag
-		sw $zero, current_iteration
+		sb $zero, current_iteration
 		
 		lb $t0, selected_operation
 		bne $t0, $zero, end_operation
@@ -88,13 +92,23 @@
 	        lw $a0, input_buffer
 		jal stackPush
 		lw $zero, input_buffer
+		la $t0, str_current_type
+		li $t1, 4
+		reset_type_loop:
+		    li $t2, 0x5F
+		    sb $t2, ($t0)
+		    addi $t0, $t0, 1
+		    addi $t1, $t1, -1
+		    bne $t1, $zero, reset_type_loop
+		
+		
 		j execCalc
 		    
 	    end_operation:
 		# + (1), - (2), * (3), p (4)
 		lb $zero, input_flag
-		lb $a0, operation_select
-		sb $zero, operation_select
+		lb $a0, selected_operation
+		sb $zero, selected_operation
 		jal operate
 	    j execCalc
 
@@ -280,3 +294,43 @@
 	addi	    $sp, $sp, 20
 	jr	    $ra
 	
+	
+    print_typing:
+	addi	    $sp, $sp, -20
+	sw	    $ra, ($sp)
+	sw	    $s0, 4($sp)
+	sw	    $s1, 8($sp)
+	sw	    $s2, 12($sp)
+	sw	    $s3, 16($sp)
+	
+	la $t0, input_internal
+	la $t1, str_current_type
+	lb $t2, current_iteration
+	copy_loop:
+	    beq	    $t2, $zero, waiting_dash
+	    lb	    $t3, ($t0)
+	    addi    $t3, $t3, 48
+	    sb	    $t3, ($t1)
+	    addi    $t0, $t0, 1
+	    addi    $t1, $t1, 1
+	    addi    $t2, $t2, -1
+	    j	    copy_loop
+	
+	waiting_dash:
+	    lb $t0, current_iteration
+	    la $t1, str_current_type
+	    add $t0, $t0, $t1
+	    li $t2, 0xFF
+	    sb $t2, ($t0)
+	
+	la $a0, str_current_type
+	li $a1, 0x5F06
+	jal print_str
+	    
+	lw	    $s3, 16($sp)
+	lw	    $s2, 12($sp)
+	lw	    $s1, 8($sp)
+	lw	    $s0, 4($sp)
+	lw	    $ra, ($sp)
+	addi	    $sp, $sp, 20
+	jr	    $ra

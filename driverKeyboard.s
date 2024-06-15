@@ -3,7 +3,7 @@
 .text
 # This file contains the main driver for the usage of the T0308 membrane keyboard
 # It has an integrated debounce of 1000 cpu clock signals
-# It considers a time of XX for the bla bla bla
+# Inputs are sent once the button is released
     # pin/port config
     # RE0 thru RE7
     
@@ -136,6 +136,7 @@ keyboard_read:
 	    li $v0, 35
 	    j end_read
 	case4_row4:
+	    # esc - 0xF0
 	    li $v0, 0xF7
 	    j end_read
     end_read:
