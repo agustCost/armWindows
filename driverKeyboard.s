@@ -116,8 +116,7 @@ keyboard_read:
 	    li $v0, 57
 	    j end_read
 	case4_row3:
-	    # esc - 0xF0
-	    li $v0, 0xF0
+	    li $v0, 0xFB
 	    j end_read
     pressed_row4:
 	beq $t0, 0x18, case1_row4

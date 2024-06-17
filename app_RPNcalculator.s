@@ -11,10 +11,6 @@
     
     selected_operation: .byte 0x0
     
-    
-    buffer1: .word 0
-    buffer2: .word 0
-    
     str_current_type: .byte 0x5F, 0x5F, 0x5F, 0x5F, 0x0
     str_stack: .asciiz "Stack: "
 .text
@@ -33,6 +29,7 @@
 	    beq $v0, 0xF0, exit_calc
 	    beq $v0, 42, operation_select
 	    beq $v0, 0xF7, end_read
+	    beq $v0, 0xFB, delete_last
 	    li $t1, 0x1
 	    sb $t1, input_flag
 	    
@@ -43,7 +40,7 @@
 		addi $v0, $v0, -48
 		sb $v0, ($t1)
 		addi $t0, $t0, 1
-		beq $t0, 4, end_and_convert
+		beq $t0, 5, end_and_convert
 		sb $t0, current_iteration
 		j read_input
 		
@@ -123,7 +120,10 @@
 		add $a0, $v0, $zero
 		jal stackPush
 	    j execCalc
-
+	    
+	delete_last:
+	    jal backspace
+	    j execCalc
 	exit_calc:
 	    j goBack
     # push function
