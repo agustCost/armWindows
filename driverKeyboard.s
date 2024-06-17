@@ -1,5 +1,18 @@
 .globl keyboard_check
+.globl keyboard_type
 .data
+    one:		.byte ',', '.', '!', '1'
+    two:		.byte  'A','B','C','2'
+    three:		.byte  'D','E','F','3'
+    four:		.byte  'G','H','I','4'
+    five:		.byte  'J','K','L','5'
+    six:		.byte  'M','N','O','6'
+    seven:		.byte  'P','Q','R','S','7'
+    eight:		.byte  'T','U','V','8'
+    nine:		.byte  'W','X','Y','Z','9'
+    zero:		.byte  ' ','0'
+    input_counter: .byte 0x0
+    last_input: .byte 0x0
 .text
 # This file contains the main driver for the usage of the T0308 membrane keyboard
 # It has an integrated debounce of 1000 cpu clock signals
@@ -180,5 +193,134 @@ keyboard_check:
 	lw	$ra, ($sp)
 	addi    $sp, $sp, 20
 	jr	$ra
+	
+	
+	
+keyboard_type:
+    addi    $sp, $sp, -20
+    sw	    $ra, ($sp)
+    sw	    $s0, 4($sp)
+    sw	    $s1, 8($sp)
+    sw	    $s2, 12($sp)
+    sw	    $s3, 16($sp)
+	
+	jal keyboard_check
+	
+	keyboard_type_loop:
+	    sb $v0, last_input
+    
+	    beq $v0, $zero, finish
+	    beq $v0, 0xFE, keyboard_type_loop
+	    beq $v0, 0xFB, keyboard_type_loop
 	    
-
+	    
+	    beq $v0, 0xF7, finish
+	    beq $v0, 0xF0, finish
+ 
+	    
+	    jal keyboard_check
+	    lb $t1, last_input
+	    bne $v0, $t1, confirmed_input
+	    
+	    
+	    lb $t0, input_counter
+	    addi $t0, $t0, 1
+	    beq $t0, 4, reset_counter
+	    
+	    
+	    
+	    li $s0, 0
+	    waiting_loop:
+	    jal keyboard_check
+	    bne $v0, $zero, keyboard_type_loop
+	    addi $s0, $s0, 1
+	    beq $s0, 1000, confirmed_input
+	    reset_counter:
+		sb $zero, input_counter
+		j keyboard_type_loop
+	    
+	confirmed_input:
+	    lb $t0, input_counter
+	    # t1 last input
+	    # manage output and store in $v0
+	    lb $t1, last_input
+	    
+	    beq $t1, 48, case0
+	    beq $t1, 49, case1
+	    beq $t1, 50, case2
+	    beq $t1, 51, case3
+	    beq $t1, 52, case4
+	    beq $t1, 53, case5
+	    beq $t1, 54, case6
+	    beq $t1, 55, case7
+	    beq $t1, 56, case8
+	    beq $t1, 57, case9
+	    case0:
+		la $s1, zero
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case1:
+		la $s1, one
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case2:
+		la $s1, two
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case3:
+		la $s1, three
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case4:
+		la $s1, four
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case5:
+		la $s1, five
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case6:
+		la $s1, six
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case7:
+		la $s1, seven
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case8:
+		la $s1, eight
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    case9:
+		la $s1, nine
+		lb $t0, input_counter
+		add $s1, $t0, $s1
+		lb $v0, ($s1)
+		j finish
+	    finish:
+	    sb $zero, input_counter
+	lw	$s3, 16($sp)
+	lw	$s2, 12($sp)
+	lw	$s1, 8($sp)
+	lw	$s0, 4($sp)
+	lw	$ra, ($sp)
+	addi    $sp, $sp, 20
+	jr	$ra

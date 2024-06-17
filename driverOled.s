@@ -177,7 +177,7 @@ clear_display:
     sw	    $s2, 12($sp)
     sw	    $s3, 16($sp)
     sw	    $s4, 20($sp)
-    
+
     li $s0, 0
 	clear_display_loop:
 	    li $a0, 0x00
