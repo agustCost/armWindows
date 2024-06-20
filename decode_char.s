@@ -100,50 +100,70 @@
 	sw	    $s1, 8($sp)
 	sw	    $s2, 12($sp)
 	sw	    $s3, 16($sp)
-    
-	beq $a0, $zero, only_zero
-	blt $a0, $zero, negative
 	
-        
-	la $t0, str_buffer
-	proccess_loop:
-	    beq $a0, $zero, finish_convertion
-	    rem $t1, $a0, 10
-	    addi $t1, $t1, 48
-	    sb $t1, ($t0)
-	    addi $t0, $t0, 1
-	    div $a0, $a0, 10
-	    j proccess_loop
+	la $s1, str_buffer
+	bltz $a0, negate_number
+	j next0
 	
-	negative:
-	    la $t0, str_buffer
-	    li $t2, 45
-	    sb $t2, ($t0)
-	    addi $t0, $t0, 1
-	    j proccess_loop
-	
-	only_zero:
-	    la $t0, str_buffer
-	    li $t2, 48
-	    sb $t2, ($t0)
-	    sb $zero, 1($t0)
-	    j ready_to_print    
+	negate_number:
+	    li $t0, '-'
+	    sb $t0, ($s1)
+	    addi $s1, $s1, 1
+	    li $t0, -1
+	    mul $a0, $a0, $t0
 	    
+	next0:
+	    li $t0, -1
+	    addi $sp, $sp, -4
+	    sw $t0, ($sp)
 	    
-	finish_convertion:
-	    sb $zero, ($t0)
+	digit_push:
+	    blez $a0, next1
+	    li $t0, 10
+	    div $a0, $t0
+	    mfhi $t0
+	    mflo $a0
+	    addi $sp, $sp, -4
+	    sw $t0, ($sp)
+	    j digit_push
+	next1:
+	    lw $t0, ($sp)
+	    addi $sp, $sp, 4
+	    bltz $t0, negate_digit
+	    j pop_digits
+	    
+	negate_digit:
+	    li $t0, '0'
+	    sb $t0, ($s1)
+	    addi $s1, $s1, 1
+	    lw $t0, ($sp)
+	    addi $sp, $sp, 4
+	    j pop_digits
+	    
+	pop_digits: 
+	    bltz $t0, next2
+	    addi $t0, $t0, '0'
+	    sb $t0, ($s1)
+	    addi $s1, $s1, 1
+	    lw $t0, ($sp)
+	    addi $sp, $sp, 4
+	    j pop_digits
+	next2:
+	    sb $zero, ($s1)
+	
 	ready_to_print:
 	    la $a0, str_buffer
 	    lw $a1, position
 	    jal print_str
-	    
-	    la $t0, str_buffer
-	    li $t1, 0
-	    reset_loop:
-		sb $zero, ($t0)
-		addi $t0, $t0, 1
-		addi $t1, $t1, 1
-		bne $t1, 9, reset_loop
+	
+	la $t0, str_buffer
+        li $t1, 0
+        reset_loop:
+        sb $zero, ($t0)
+        addi $t0, $t0, 1
+        addi $t1, $t1, 1
+        bne $t1, 9, reset_loop
+	
 	lw	    $s3, 16($sp)
 	lw	    $s2, 12($sp)
 	lw	    $s1, 8($sp)

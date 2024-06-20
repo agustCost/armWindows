@@ -30,6 +30,7 @@
 	    beq $v0, 42, operation_select
 	    beq $v0, 0xF7, end_read
 	    beq $v0, 0xFB, delete_last
+	    beq $v0, 35, execCalc
 	    li $t1, 0x1
 	    sb $t1, input_flag
 	    
@@ -64,7 +65,7 @@
 	    lb $t1, input_flag
 	    beq $t1, $zero, read_input
 	    end_and_convert:
-		lb $zero, input_flag
+		sb $zero, input_flag
 		
 		lb $t0, selected_operation
 		bne $t0, $zero, end_operation
@@ -265,7 +266,7 @@
 	    add $v0, $s0, $s1
 	    j operate_end
 	sub_op:
-	    sub $v0, $s0, $s1
+	    sub $v0, $s1, $s0
 	    j operate_end
 	mult_op:
 	    mul $v0, $s0, $s1

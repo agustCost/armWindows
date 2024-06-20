@@ -178,6 +178,30 @@ clear_display:
     sw	    $s3, 16($sp)
     sw	    $s4, 20($sp)
 
+    # Column adress
+	li $a0, 0x21
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x00
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x7F
+	li $a1, 0x1
+	jal send_1306
+	# Page adress
+	li $a0, 0x22
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x00
+	li $a1, 0x1
+	jal send_1306
+	
+	li $a0, 0x7
+	li $a1, 0x1
+	jal send_1306
     li $s0, 0
 	clear_display_loop:
 	    li $a0, 0x00

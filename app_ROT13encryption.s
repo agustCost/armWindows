@@ -1,8 +1,18 @@
 .globl execRot
     
 .data
+    one:		.byte ',', '.', '!', '1'
+    two:		.byte  'A','B','C','2'
+    three:		.byte  'D','E','F','3'
+    four:		.byte  'G','H','I','4'
+    five:		.byte  'J','K','L','5'
+    six:		.byte  'M','N','O','6'
+    seven:		.byte  'P','Q','R','S','7'
+    eight:		.byte  'T','U','V','8'
+    nine:		.byte  'W','X','Y','Z','9'
+    zero:		.byte  ' ','0'
     
-    
+    input_counter: .byte 0x0
     stack: .space 40
     stack_top: .byte 0x0
     entry: .asciiz "> "
@@ -10,20 +20,108 @@
 .text
     
     execRot:
+	jal clear_display
 	la $a0, entry
 	li $a1, 0x0B00
 	jal print_str
-    
-	jal keyboard_type
-	beq $v0, $zero, execRot
-	
-	beq $v0, 0xF7, end_type
-	lb $t0, stack_top
-	beq $t0, 38, end_type
-	
-	add $a0, $v0, $zero
-	jal stackPush
 	jal print_stack_rot
+	
+	waiting_loop:
+	    jal keyboard_check
+	    beq $v0, $zero, waiting_loop
+	
+	    beq $v0, 0xFF, exit_rot
+	    beq $v0, 35, rot_backspace
+	    beq $v0, 0xF7, end_type
+	    lb $t0, stack_top
+	    beq $t0, 38, end_type
+	    li $s3, 0
+	    sb $zero, input_counter
+	    add $s0, $zero, $v0
+	    beq $v0, 48, case0
+	    beq $v0, 49, case1
+	    beq $v0, 50, case2
+	    beq $v0, 51, case3
+	    beq $v0, 52, case4
+	    beq $v0, 53, case5
+	    beq $v0, 54, case6
+	    beq $v0, 55, case7
+	    beq $v0, 56, case8
+	    beq $v0, 57, case9
+	    
+	    
+	    case0:
+		la $s1, zero
+		li $s2, 1
+		j print_input
+	    case1:
+		la $s1, one
+		li $s2, 3
+		j print_input
+	    case2:
+		la $s1, two
+		li $s2, 3
+		j print_input
+	    case3:
+		la $s1, three
+		li $s2, 3
+		j print_input
+	    case4:
+		la $s1, four
+		li $s2, 3
+		j print_input
+	    case5:
+		la $s1, five
+		li $s2, 3
+		j print_input
+	    case6:
+		la $s1, six
+		li $s2, 3
+		j print_input
+	    case7:
+		la $s1, seven
+		li $s2, 4
+		j print_input
+	    case8:
+		la $s1, eight
+		li $s2, 3
+		j print_input
+	    case9:
+		la $s1, nine
+		li $s2, 4
+		j print_input
+	    
+		
+	    halt:
+		addi $s3, $s3, 1
+		beq $s3, 8000, waiting_loop
+		jal keyboard_check
+		beq $v0, $zero, halt
+		beq $v0, 35, rot_backspace
+		beq $v0, 0xFF, exit_rot
+		beq $v0, 0xF7, end_type
+		bne $v0, $s0, waiting_loop
+	    
+	    lb $t0, input_counter
+	    beq $t0, $s2, reset 
+	    addi $t0, $t0, 1
+	    sb $t0, input_counter
+	    jal stackPop
+	    j print_input
+	    reset:
+		sb $zero, input_counter
+		jal stackPop
+		
+
+	    print_input:
+		lb $t0, input_counter
+		add $t0, $s1, $t0
+		lb $a0, ($t0)
+		jal stackPush
+		jal print_stack_rot
+		li $s3, 0
+		j halt
+
 	j execRot
 
 	end_type:
@@ -62,12 +160,10 @@
 
 	    j reading_loop
 	reading_loop:
-	    
 
-	    li $a0, 2000
-	    jal delay
 	    jal keyboard_check
-	    beq $v0, 0x7F, execRot
+	    beq $v0, 0xF7, exit_rot
+	    beq $v0, 0xFF, exit_rot
 	    j reading_loop
 	
 	    
@@ -83,7 +179,9 @@
 	sb $zero, stack_top
 	j goBack
 	
-	
+    rot_backspace:
+	jal stackPop
+	j execRot
 	
 	
 	# Stack functions
@@ -194,3 +292,5 @@
 	lw	    $ra, ($sp)
 	addi    $sp, $sp, 20
 	jr	    $ra
+	
+    

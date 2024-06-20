@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s
+SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s app_wordleGame.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d ${OBJECTDIR}/app_RPNcalculator.o.d ${OBJECTDIR}/app_ROT13encryption.o.d ${OBJECTDIR}/utilities.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o ${OBJECTDIR}/app_wordleGame.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d ${OBJECTDIR}/app_RPNcalculator.o.d ${OBJECTDIR}/app_ROT13encryption.o.d ${OBJECTDIR}/utilities.o.d ${OBJECTDIR}/app_wordleGame.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o
+OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o ${OBJECTDIR}/app_wordleGame.o
 
 # Source Files
-SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s
+SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s app_wordleGame.s
 
 
 
@@ -134,6 +134,11 @@ ${OBJECTDIR}/utilities.o: utilities.s  .generated_files/flags/default/ac678129c0
 	@${RM} ${OBJECTDIR}/utilities.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/utilities.o utilities.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/utilities.o.d" -mdfp="${DFP_DIR}"
 	
+${OBJECTDIR}/app_wordleGame.o: app_wordleGame.s  .generated_files/flags/default/2049a00a6fff90c7cd7f2221352ac9a6efb2bcd1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/app_wordleGame.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/app_wordleGame.o app_wordleGame.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/app_wordleGame.o.d" -mdfp="${DFP_DIR}"
+	
 else
 ${OBJECTDIR}/driverOled.o: driverOled.s  .generated_files/flags/default/31a302394ccc57d488ae46d713f4ba802bdd52f5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
@@ -179,6 +184,11 @@ ${OBJECTDIR}/utilities.o: utilities.s  .generated_files/flags/default/532a9bc0a0
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/utilities.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/utilities.o utilities.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/utilities.o.d" -mdfp="${DFP_DIR}"
+	
+${OBJECTDIR}/app_wordleGame.o: app_wordleGame.s  .generated_files/flags/default/5f540c2614a9cd3dc5f598099e073a4972eb978c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/app_wordleGame.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/app_wordleGame.o app_wordleGame.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/app_wordleGame.o.d" -mdfp="${DFP_DIR}"
 	
 endif
 
