@@ -1,3 +1,7 @@
+# This file could be used to configure the RTC module, but due to a lack of pin
+# conections for an external oscillator, it needed to be descarded.
+    
+    
 .globl set_time
 .globl print_time
 .globl init_timeModule

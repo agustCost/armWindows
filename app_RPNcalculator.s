@@ -1,3 +1,9 @@
+# This file contains the algorithms necessary to run the calculator application.
+# The exit is managed by jumping to goBack. The application itself runs on a loop
+# defined by execCalc.
+# It prints and updates the screen as the user inputs commands, and stores what is
+# issued when the Return key is pressed.
+# Possible bugs are known.
 .globl execCalc
 .data
     stack: .space 40
@@ -13,6 +19,7 @@
     
     str_current_type: .byte 0x5F, 0x5F, 0x5F, 0x5F, 0x0
     str_stack: .asciiz "Stack: "
+    str_operands: .asciiz "Insufficient operands"
 .text
     execCalc:
 	jal clear_display
@@ -117,18 +124,31 @@
 		lb $zero, input_flag
 		lb $a0, selected_operation
 		sb $zero, selected_operation
+		lw $t0, stack_top
+		ble $t0, 1, insf_operands
 		jal operate
 		add $a0, $v0, $zero
 		jal stackPush
 	    j execCalc
 	    
+	    
+	    insf_operands:
+		jal clear_display
+		la $a0, str_operands
+		li $a1, 0x0B00
+		jal print_str
+		la $a0, 0xFFFF
+		jal delay
+		la $a0, 0xFFFF
+		jal delay
+		j execCalc
 	delete_last:
 	    jal backspace
 	    j execCalc
 	exit_calc:
 	    j goBack
-    # push function
-    # $a0 value
+    
+    # Stack push function manages a stack and pops what is stored in $a0 when called
     stackPush:
 	addi    $sp, $sp, -20
 	sw	    $ra, ($sp)
@@ -138,7 +158,7 @@
 	sw	    $s3, 16($sp)
 	
 	lw $t0, stack_top
-	# max size
+	# max size definition below
 	
 	bge $t0, 10, stack_overflow
 	
@@ -154,7 +174,7 @@
 	j end_push
 	
 	stack_overflow:
-	# alert overflow
+	# overflow is managed by ignoring the user request
 	    
 	
 	
@@ -167,7 +187,7 @@
 	addi    $sp, $sp, 20
 	jr	    $ra
 	
-    # pop function, $v0 popped value
+    # Stack pop function, $v0 stores the popped value
     stackPop:
 	addi    $sp, $sp, -20
 	sw	    $ra, ($sp)
@@ -189,7 +209,7 @@
 	lw $v0, ($t1)
 	
 	stack_underflow:
-	    # alert user
+	    # stack underflow is managed by ignoring the user request
 	
 	lw	    $s3, 16($sp)
 	lw	    $s2, 12($sp)
@@ -199,7 +219,7 @@
 	addi    $sp, $sp, 20
 	jr	    $ra
 	
-    # print stack function
+    # This function iterates thru the stack, calling print_int for each value
     print_stack:
 	addi    $sp, $sp, -20
 	sw	    $ra, ($sp)
@@ -274,8 +294,6 @@
 	power_op:
 	    li $v0, 1
 	    power_loop:
-		# t1 = exponent
-		# t0 = base
 		beq $s1, $zero, operate_end
 		mul $v0, $v0, $s0
 		addi $s1, $s1, -1

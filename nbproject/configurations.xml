@@ -19,7 +19,6 @@
                    projectFiles="true">
       <itemPath>driverOled.s</itemPath>
       <itemPath>main.s</itemPath>
-      <itemPath>driverBuzzer.s</itemPath>
       <itemPath>driverKeyboard.s</itemPath>
       <itemPath>config.c</itemPath>
       <itemPath>decode_char.s</itemPath>

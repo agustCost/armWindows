@@ -12,7 +12,7 @@
     
 .text
     
-    # FUnction xddd
+    # Print char function prints a char given in $a0 the position given by the position buffer
     # $a0 -> character in ascii , 0xFF prints waiting dash
     print_char:
 	addi	    $sp, $sp, -20
@@ -25,7 +25,7 @@
 	
 	beq	    $a0, $zero, endLine
 	beq	    $a0, 0xFF, waiting_dash
-	# cargar bitmap
+	# load bitmap
 	la $t0, characters
 	addi $t1, $a0, -32
 	mul $t1, $t1, 8
@@ -74,6 +74,7 @@
 	addi	    $sp, $sp, 20
 	jr	    $ra
 
+    # This function resets the position buffer to the default state
     reset_position:
 	addi	    $sp, $sp, -20
 	sw	    $ra, ($sp)
@@ -93,6 +94,8 @@
 	addi    $sp, $sp, 20
 	jr	    $ra
 	
+    # This function takes an integer given by $a0, converting it to a string and then printing it
+    # Bugs are known in this function
     print_int:
 	addi	    $sp, $sp, -20
 	sw	    $ra, ($sp)
@@ -101,63 +104,48 @@
 	sw	    $s2, 12($sp)
 	sw	    $s3, 16($sp)
 	
-	la $s1, str_buffer
-	bltz $a0, negate_number
-	j next0
+	beq $a0, $zero, handle_zero
+	bltz $a0, handle_negative
 	
-	negate_number:
-	    li $t0, '-'
-	    sb $t0, ($s1)
-	    addi $s1, $s1, 1
-	    li $t0, -1
-	    mul $a0, $a0, $t0
-	    
-	next0:
-	    li $t0, -1
-	    addi $sp, $sp, -4
-	    sw $t0, ($sp)
-	    
-	digit_push:
-	    blez $a0, next1
-	    li $t0, 10
-	    div $a0, $t0
-	    mfhi $t0
-	    mflo $a0
-	    addi $sp, $sp, -4
-	    sw $t0, ($sp)
-	    j digit_push
-	next1:
-	    lw $t0, ($sp)
-	    addi $sp, $sp, 4
-	    bltz $t0, negate_digit
-	    j pop_digits
-	    
-	negate_digit:
-	    li $t0, '0'
-	    sb $t0, ($s1)
-	    addi $s1, $s1, 1
-	    lw $t0, ($sp)
-	    addi $sp, $sp, 4
-	    j pop_digits
-	    
-	pop_digits: 
-	    bltz $t0, next2
-	    addi $t0, $t0, '0'
-	    sb $t0, ($s1)
-	    addi $s1, $s1, 1
-	    lw $t0, ($sp)
-	    addi $sp, $sp, 4
-	    j pop_digits
-	next2:
-	    sb $zero, ($s1)
 	
-	ready_to_print:
-	    la $a0, str_buffer
-	    lw $a1, position
-	    jal print_str
+	
+	la $s2, str_buffer
+	add $s0, $a0, $zero
+	li $t0, 0 # buffer length
+	
+	convert_loop:
+		li $s1, 10
+		div $s0, $s1
+		mfhi $t4 # rem
+		mflo $s0 # quo
+	
+		addi $t4, $t4, 48
+		sb $t4, ($s2)
+		addi $t0, $t0, 1
+		addi $s2, $s2, 1
+		bne $s0, $zero, convert_loop
+	sb $zero, ($s2)
+	j done
+	handle_zero:
+		li $t4, 48
+		sb $t4, ($s2)
+		addi $s2, $s2, 1
+		sb $zero, ($s2)
+
+	handle_negative:
+	    la $s2, str_buffer
+	    li $t5, '-'
+	    sb $t2, ($s2)
+	    addi $s2, $s2, 1
+	    mul $s0, $a0, -1
+	    j convert_loop
+	done:	
+	la $a0, str_buffer
+	lw $a1, position
+	jal print_str
 	
 	la $t0, str_buffer
-        li $t1, 0
+	li $t1, 0
         reset_loop:
         sb $zero, ($t0)
         addi $t0, $t0, 1
@@ -173,7 +161,10 @@
 	jr	    $ra
 	
 	
-	# $a0 adress ; $a1 -> position 0xaabb (aa column in hex) (bb page )
+	# $a0 adress ; $a1 -> position 0xaabb (aa column in hex) (bb page 
+    # This function prints a given string. $a0 corresponds to the start adress
+    # of said string, and $a1 takes the position, read as column and pages in hexadecimal.
+    # $a0 adress ; $a1 -> position 0xaabb (aa column in hex) (bb page)
     print_str:
 	addi	    $sp, $sp, -20
 	sw	    $ra, ($sp)
@@ -201,7 +192,7 @@
 	addi	    $sp, $sp, 20
 	jr	    $ra
 	
-	# takes position in $a0
+    # This function updates the position buffer with respect to what is set in $a0 when called
     update_print_position:
 	addi	    $sp, $sp, -20
 	sw	    $ra, ($sp)

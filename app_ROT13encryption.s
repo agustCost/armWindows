@@ -1,3 +1,5 @@
+# This file contains the algorithms to run the ROT13 app.
+    
 .globl execRot
     
 .data

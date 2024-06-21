@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s app_wordleGame.s
+SOURCEFILES_QUOTED_IF_SPACED=driverOled.s main.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s app_wordleGame.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o ${OBJECTDIR}/app_wordleGame.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverBuzzer.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d ${OBJECTDIR}/app_RPNcalculator.o.d ${OBJECTDIR}/app_ROT13encryption.o.d ${OBJECTDIR}/utilities.o.d ${OBJECTDIR}/app_wordleGame.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o ${OBJECTDIR}/app_wordleGame.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/driverOled.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/driverKeyboard.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/decode_char.o.d ${OBJECTDIR}/driverTime.o.d ${OBJECTDIR}/app_RPNcalculator.o.d ${OBJECTDIR}/app_ROT13encryption.o.d ${OBJECTDIR}/utilities.o.d ${OBJECTDIR}/app_wordleGame.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverBuzzer.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o ${OBJECTDIR}/app_wordleGame.o
+OBJECTFILES=${OBJECTDIR}/driverOled.o ${OBJECTDIR}/main.o ${OBJECTDIR}/driverKeyboard.o ${OBJECTDIR}/config.o ${OBJECTDIR}/decode_char.o ${OBJECTDIR}/driverTime.o ${OBJECTDIR}/app_RPNcalculator.o ${OBJECTDIR}/app_ROT13encryption.o ${OBJECTDIR}/utilities.o ${OBJECTDIR}/app_wordleGame.o
 
 # Source Files
-SOURCEFILES=driverOled.s main.s driverBuzzer.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s app_wordleGame.s
+SOURCEFILES=driverOled.s main.s driverKeyboard.s config.c decode_char.s driverTime.s app_RPNcalculator.s app_ROT13encryption.s utilities.s app_wordleGame.s
 
 
 
@@ -98,11 +98,6 @@ ${OBJECTDIR}/main.o: main.s  .generated_files/flags/default/7600fa7fbb5877fb6253
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/main.o main.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/main.o.d" -mdfp="${DFP_DIR}"
-	
-${OBJECTDIR}/driverBuzzer.o: driverBuzzer.s  .generated_files/flags/default/6729c775480d1c7abdee1e19dfbb4dd38d291b37 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/driverBuzzer.o 
-	${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG  -D__MPLAB_DEBUGGER_PK3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverBuzzer.o driverBuzzer.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,--gdwarf-2,-MD="${OBJECTDIR}/driverBuzzer.o.d" -mdfp="${DFP_DIR}"
 	
 ${OBJECTDIR}/driverKeyboard.o: driverKeyboard.s  .generated_files/flags/default/2f2d36998b25c227061846aefa7ac54fae5ea227 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
@@ -149,11 +144,6 @@ ${OBJECTDIR}/main.o: main.s  .generated_files/flags/default/68c28b172ea6b27abc53
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/main.o main.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/main.o.d" -mdfp="${DFP_DIR}"
-	
-${OBJECTDIR}/driverBuzzer.o: driverBuzzer.s  .generated_files/flags/default/9ff808f14226127d1da134a0c8c869eb05bbef5d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/driverBuzzer.o 
-	${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${OBJECTDIR}/driverBuzzer.o driverBuzzer.s  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),--gdwarf-2,-MD="${OBJECTDIR}/driverBuzzer.o.d" -mdfp="${DFP_DIR}"
 	
 ${OBJECTDIR}/driverKeyboard.o: driverKeyboard.s  .generated_files/flags/default/b462698eb0db3dadbf9d9d48350b450d7c6ba447 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
